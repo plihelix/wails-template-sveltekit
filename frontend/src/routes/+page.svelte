@@ -11,7 +11,7 @@
 </script>
 
 <main>
-  <h1>Welcome to SvelteKit</h1>
+  <h1>Welcome to the Unofficial Wails.io SvelteKit Template!</h1>
   <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> 
     to read the documentation</p>
   <img alt="Wails logo" id="logo" src="{logo}">

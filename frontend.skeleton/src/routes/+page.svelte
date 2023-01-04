@@ -1,6 +1,6 @@
 <script>
-  import logo from '$lib/images/logo-universal.png'
-  import {Greet} from '../wailsjs/go/main/App.js'
+  import logo from '../assets/images/logo-universal.png'
+  import {Greet} from '../lib/wailsjs/go/main/App.js'
 
   let resultText = "Please enter your name below 👇"
   let name
@@ -11,7 +11,7 @@
 </script>
 
 <main>
-  <h1>Welcome to SvelteKit</h1>
+  <h1>Welcome to the Unofficial Wails.io SvelteKit Template!</h1>
   <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> 
     to read the documentation</p>
   <img alt="Wails logo" id="logo" src="{logo}">
