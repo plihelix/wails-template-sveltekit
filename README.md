@@ -14,7 +14,8 @@ to this in your browser, and you can call your Go code from devtools.
 ## Two Frontend Directories Dncluded
 
 frontend.demo - the sveltekit demo (default)
-Note: With a static adapter, server side rendering is disabled and the app is served as a static site. This breaks the wordle clone in the demo, as the javascript is not executed on any server.
+
+- Note: With a static adapter, server side rendering is disabled and the app is served as a static site. This breaks the wordle clone in the demo, as the javascript is not executed on any server.
 
 - Havent tinkered with getting it to work, which I suspect is really just a matter of passing the work off to golang instead.
 
