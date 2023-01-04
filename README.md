@@ -2,7 +2,7 @@
 
 ## About
 
-This is the official Wails Svelte template.
+This is the unofficial Wails Sveltekit (Static) template.
 
 ## Live Development
 
