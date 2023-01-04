@@ -11,9 +11,9 @@ server that will provide very fast hot reload of your frontend changes. If you w
 and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
 to this in your browser, and you can call your Go code from devtools.
 
-## included two frontend directories;
+## Two Frontend Directories Dncluded
 
-frontend.demo - the sveltekit demo
+frontend.demo - the sveltekit demo (default)
 Note: With a static adapter, server side rendering is disabled and the app is served as a static site. This breaks the wordle clone in the demo, as the javascript is not executed on any server.
 
 - Havent tinkered with getting it to work, which I suspect is really just a matter of passing the work off to golang instead.
