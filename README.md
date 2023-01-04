@@ -24,7 +24,7 @@ frontend.skeleton - an empty app frontend
 
 Both are configured not to do server side rendering; they build the site into the frontend/build directory which is embedded into the application during 'wails build'.
 
-####'wails dev' should properly launch vite to serve the site for live development without needing to seperately launch 'npm run dev' or your flavor such as pnpm in the frontend directory seperately.
+#### 'wails dev' should properly launch vite to serve the site for live development without needing to seperately launch 'npm run dev' or your flavor such as pnpm in the frontend directory seperately.
 
 ## Building
 
