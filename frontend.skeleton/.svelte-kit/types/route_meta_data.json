@@ -1,0 +1,14 @@
+{
+	"/": [
+		"src/routes/+page.js"
+	],
+	"/about": [
+		"src/routes/about/+page.js"
+	],
+	"/sverdle": [
+		"src/routes/sverdle/+page.server.js"
+	],
+	"/sverdle/how-to-play": [
+		"src/routes/sverdle/how-to-play/+page.js"
+	]
+}
