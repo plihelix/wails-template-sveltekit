@@ -1,5 +1,5 @@
 <script>
-  import logo from '$lib/images/logo-universal.png'
+  import logo from 'assets/images/logo-universal.png'
   import {Greet} from '../wailsjs/go/main/App.js'
 
   let resultText = "Please enter your name below 👇"

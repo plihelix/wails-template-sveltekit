@@ -5,4 +5,6 @@ frontend/wailsjs
 frontend.bak
 frontend/*.lock
 frontend/*.md5
+frontend/.npmrc
 .git
+
