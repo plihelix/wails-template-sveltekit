@@ -1,3 +1,7 @@
 build/bin
 frontend/dist
 frontend/node_modules
+frontend.bak
+frontend/*.lock
+frontend/*.md5
+.git
