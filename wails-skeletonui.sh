@@ -123,16 +123,25 @@ rm svelte.config.js
 echo "wsvelte: ---  --- ---"
 echo "wsvelte: Creating a new svelte.config.js"
 cat > svelte.config.js << EOF
-import adapter from '@sveltejs/adapter-static'
+import adapter from '@sveltejs/adapter-auto';
+import preprocess from "svelte-preprocess";
 
-export default {
-  kit: {
-    adapter: adapter({
-		fallback: 'index.html'
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	kit: {
+		adapter: adapter({
+      fallback: 'index.html'
     }),
     embedded: true,
 	},
+	preprocess: [
+		preprocess({
+			postcss: true,
+		}),
+	],
 };
+
+export default config;
 EOF
 
 # Return to the root of the project to finish up.
