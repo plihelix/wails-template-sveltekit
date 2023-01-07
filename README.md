@@ -11,8 +11,10 @@ This is a minimally invasive template remix of [Wails.io](https://wails.io) to s
 * The first thing to understand is that Vite is a web-server which is used for the dev mode. Wails uses this to locally host a website with live reload for development mode, which the application navigates to. This is commonly used for all the top frameworks and has robust features such as server side rendering(ssr).
 
 Wails.io is an application framework that by design packages the html, js, etc front end into the binary executable during `wails build`. This happens in main.go with:
-`//go:embed all:frontend/dist
-var assets embed.FS`
+`
+//go:embed all:frontend/dist
+var assets embed.FS
+`
 If I'm reading the source correctly, these assets are served out of this embedded file-system to each systems web kit by a lightweight file asset server. 
 
 The default configuration of Vite for Svelte Kit projects includes ssr. But, this is normal for web served applications using **server** compute for more "consistent" web user experience by sending server rendered html to the client. This is more consistent than an api call to that same server, yes. But in a wails app, we're packaging the UI in the binary itself.
@@ -62,7 +64,9 @@ Using SvelteKit, the user can just navigate to the new endpoint. Automatically u
 # How to install any Vite based *SvelteKit* frontend into a new Wails project
 
 Init your new project as normal
-- `wails init -n {MY_APP} -t svelte` *// I used the svelte base just in case I am misunderstanding how this all works together.*
+- `wails init -n {MY_APP} -t svelte` 
+
+*// I used the svelte base just in case I am misunderstanding how this all works together.*
 
 Remove the new `{MY_APP}/frontend` folder:
 `cd MY_APP
@@ -71,10 +75,13 @@ rm -r ./frontend`
 Use the npm create to generate a new /frontend from a template: (eg:)
 
 - SvelteKit - and nothing else, yet.
+
 `npm create svelte@latest frontend`
 
 - [SkeletonUI](https://www.skeleton.dev/guides/install) - SvelteKit, Tailwindcss, lightweight UI
+
 `npm create skeleton-app@latest frontend`
+
 * The `Yes, using Typescript syntax` option is by recommended by SkeletonUI.
 
 I don't see why this wouldn't be the go-to choice with most; since wails uses generated ts as well.
@@ -83,15 +90,15 @@ The choices here will only matter if you open the **project** in your editor at 
 
 ## Here is where we can replicate the main issue people have when attempting to use Wails with SvelteKit.
 
-#### On `wails dev`, the binary of your app is compiled without the assets. Instead wails is expecting to connect to the Vite server at `localhost:5143` for live-reload.
+* On `wails dev`, the binary of your app is compiled without the assets. Instead wails is expecting to connect to the Vite server at `localhost:5143` for live-reload.
 
-#### On `wails build`, (default) `/frontend/dist/**/*` is stored into the binary. Wail apps, serves their *embedded* file-system to `localhost:5143`.
+* On `wails build`, (default) `/frontend/dist/**/*` is stored into the binary. Wail apps, serves their *embedded* file-system to `localhost:5143`.
 
 Both are accessed by the web kit just like any website. Allowing for all of the clientside js in the svelte page, but not the code that would run on the server in a js runtime environment.
 
 A default Svelte Kit project in the `/frontend` folder expects a Vite to do server side rendering and included server side Javascript out of the `/frontend/[src]` directories. Wails can take advantage of this in dev mode because Vite is doing the work, it just navigates to the web socket.
 
-* Compare: Svelte embeds all the script that is in the `[whatever].svelte` into a single top page, so Vite builds that page once.
+* Compare: Vite w/ Svelte embeds all the script that is in the `[whatever].svelte` into a single top page and builds that page once.
 
 If you compile now with `wails build`, you'll see the dreaded `Can't find index.html` message.
 
@@ -99,19 +106,24 @@ If you compile now with `wails build`, you'll see the dreaded `Can't find index.
 
 #### check main.go for what is being embedded
 - When we disable ssr, Vite will compile the website into `/frontend/build` which is then served just as wails will in compile. This means that `main.go`s asset embed declaration needs to be changed to:
-`//go:embed all:frontend/build
-var assets embed.FS`
+`
+//go:embed all:frontend/build
+var assets embed.FS
+`
 Note: Turning off ssr results in a minor launch hang time in dev mode as Vite compiles the assets into the build directory. This hang should be absent when compiled.
 
 ## Turning off ssr with adapter-static.
 
 Go into the front end folder and install the dependencies adding @sveltejs/adapter-static.
-`cd frontend
-npm i -D @sveltejs/adapter-static`
+`
+cd frontend
+npm i -D @sveltejs/adapter-static
+`
 
 ## Edit the svelte.config.js file.
 
-`import adapter from '@sveltejs/adapter-auto';  // Change to this.
+`
+import adapter from '@sveltejs/adapter-auto';  // Change the adapter-auto to this.
 import preprocess from "svelte-preprocess";     // <-- Others may be included from your template.
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -129,8 +141,11 @@ const config = {
 	],
 };
 
-export default config;`
+export default config;
+`
 
 ## Don't forget to include `.sveltekit` in your git or you'll probably have trouble after cloning.
+## There is a simple shell script to do this with [SkeletonUI](https://www.skeleton.dev/guides/install) located in its
+## own [repo](https://www.github.com/plihelix/wails-skeletonui-script)
 
-# That's it, go back to the root of the project and run `wails dev` or `wails build`.
+### That's it, go back to the root of the project and run `wails dev` or `wails build`.
