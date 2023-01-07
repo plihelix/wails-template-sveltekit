@@ -148,8 +148,7 @@ const config = {
 export default config;
 ```
 
-## Don't forget to include `.sveltekit` in your git or you'll probably have trouble after cloning.
-## There is a simple shell script to do this with [SkeletonUI](https://www.skeleton.dev/guides/install) located in its
-## own [repo](https://www.github.com/plihelix/wails-skeletonui-script)
+# Don't forget to include `.sveltekit` in your git or you'll probably have trouble after cloning.
+## There is a simple shell script to do this with [SkeletonUI](https://www.skeleton.dev/guides/install) located in its own [repo](https://www.github.com/plihelix/wails-skeletonui-script). Feel free to customize to your needs!
 
-### That's it, go back to the root of the project and run `wails dev` or `wails build`.
+That's it, go back to the root of the project and run `wails dev` or `wails build`. Enjoy!
