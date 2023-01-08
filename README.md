@@ -136,6 +136,7 @@ const config = {
 		adapter: adapter({
       fallback: 'index.html'    // Add this. (Don't forget the bounding '{}')
     }),
+<<<<<<< Updated upstream
     embedded: true,             // Add this.
 	},                            // <-- Others may be included from your template.
 	preprocess: [
@@ -143,6 +144,53 @@ const config = {
 			postcss: true,
 		}),
 	],
+=======
+  ],
+}
+
+export default config;
+```
+
+# If the `frontend/src/lib` folder does not exist, wails will deposit the `wailsjs/` folder into the front end root.
+While its probably best to just create this folder and reference it via `$lib/wailsjs/go/main/App.js`, I'm going to go ahead and show how to create an `@` link that begins at `frontend/`.
+
+## Edit the `frontend/tsconfig.json` or `frontend/jsconfig.json` file and add paths to the bottom of the `"compilerOptions":`.
+
+```json
+    "paths": {
+      // Overwrites the defaults and $lib is required for svelte-kit.
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      // Adds the ability to import the binding js.
+      // For example: `import { Greet } from '@wailsjs/go/main/App.js'`
+      "@/*": ["*"]
+    }
+
+```
+
+## Edit the `frontend/vite.config.js` file:
+
+```js
+import { sveltekit } from '@sveltejs/kit/vite';
+import path from 'path'
+
+/** @type {import('vite').UserConfig} */
+const config = {
+  server: {
+    fs: {
+      // Allow serving files from the frontend project root
+      allow: ['.'],
+    },
+  },
+	plugins: [sveltekit()],
+  resolve: {
+    alias: {
+      // This alias finishes the ability to reference our
+      // wailsjs dirctory for our go bindings.
+      '@': path.resolve(__dirname, './'), 
+    },
+  },
+>>>>>>> Stashed changes
 };
 
 export default config;

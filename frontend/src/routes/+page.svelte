@@ -1,6 +1,11 @@
 <script>
+<<<<<<< Updated upstream
   import logo from '../assets/images/logo-universal.png'
   import {Greet} from '../lib/wailsjs/go/main/App.js'
+=======
+  import logo from '$lib/assets/images/logo-universal.png'
+  import {Greet} from '$lib/wailsjs/go/main/App.js'
+>>>>>>> Stashed changes
 
   let resultText = "Please enter your name below 👇"
   let name
