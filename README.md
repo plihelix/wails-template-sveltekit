@@ -24,8 +24,8 @@ This means that **unlike Vite,** wails doesn't provide a web-server with a Javas
 
 ## Dependencies:
 
-* A nodejs package manager.
-* Install wails. ([docs](https://wails.io/docs/gettingstarted/installation))
+* npm
+* Wails.io ([docs](https://wails.io/docs/gettingstarted/installation))
 
 ## Install:
 
@@ -62,6 +62,7 @@ Using SvelteKit, the user can just navigate to the new endpoint. Automatically u
 # How to install this template
 
 - `wails init -n {MY_APP} -t https://github.com/plihelix/wails-sveltekit`
+
 
 # How to install any Vite based *SvelteKit* frontend into a new Wails project
 
@@ -124,31 +125,85 @@ cd frontend
 npm i -D @sveltejs/adapter-static
 ```
 
-## Edit the svelte.config.js file.
+## Edit the `frontend/svelte.config.js` file.
 
 ```js
-import adapter from '@sveltejs/adapter-auto';  // Change the adapter-auto to this.
-import preprocess from "svelte-preprocess";     // <-- Others may be included from your template.
+// Change from adapter-auto to adapter-static
+import adapter from '@sveltejs/adapter-static';
+// Other imports may be present depending on your template.
+import preprocess from "svelte-preprocess";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	kit: {                        // <-- Begins SvelteKit options.
-		adapter: adapter({
-      fallback: 'index.html'    // Add this. (Don't forget the bounding '{}')
+  // SvelteKit's section:
+  kit: {
+    adapter: adapter({
+      // Static needs a fallback page.
+      fallback: 'index.html'
+    })
+  },
+  // (Vite's section):
+  // Others:
+  preprocess: [
+    preprocess({
+      postcss: true,
     }),
-    embedded: true,             // Add this.
-	},                            // <-- Others may be included from your template.
-	preprocess: [
-		preprocess({
-			postcss: true,
-		}),
-	],
+  ],
+}
+
+export default config;
+```
+
+## Edit the `frontend/tsconfig.json` or `frontend/jsconfig.json` file and add paths to the bottom of the `"compilerOptions":`.
+
+```json
+    "paths": {
+      // Overwrites the defaults and $lib is required for svelte-kit.
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      // Adds the ability to import the binding js.
+      // For example: `import { Greet } from '@wailsjs/go/main/App.js'`
+      "@/*": ["*"]
+    }
+
+```
+
+## Edit the `frontend/vite.config.js` file:
+
+```js
+import { sveltekit } from '@sveltejs/kit/vite';
+import path from 'path'
+
+/** @type {import('vite').UserConfig} */
+const config = {
+  server: {
+    fs: {
+      // Allow serving files from the frontend project root
+      allow: ['.'],
+    },
+  },
+	plugins: [sveltekit()],
+  resolve: {
+    alias: {
+      // This alias finishes the ability to reference our
+      // wailsjs dirctory for our go bindings.
+      '@': path.resolve(__dirname, './'), 
+    },
+  },
 };
 
 export default config;
 ```
 
+## And finally, edit the `wails.json` tag `fronted:build`.
+
+This tells Vite to automatically adjust links as it packages the production build for an embedded application.
+```json
+"frontend:build": "npm run build --base=./",
+```
+
 # Don't forget to include `.sveltekit` in your git or you'll probably have trouble after cloning.
 ## There is a simple shell script to do this with [SkeletonUI](https://www.skeleton.dev/guides/install) located in its own [repo](https://www.github.com/plihelix/wails-skeletonui-script). Feel free to customize to your needs!
+### It does not complete the Wails integration, you will still need to follow this readme to gain access to your go methods.
 
 That's it, go back to the root of the project and run `wails dev` or `wails build`. Enjoy!

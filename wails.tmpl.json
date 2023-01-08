@@ -2,7 +2,7 @@
   "name": "{{.ProjectName}}",
   "outputfilename": "{{.BinaryName}}",
   "frontend:install": "pnpm install",
-  "frontend:build": "pnpm run build",
+  "frontend:build": "pnpm run build --base=./",
   "frontend:dev:watcher": "pnpm run dev",
   "frontend:dev:serverUrl": "auto",
   "wailsjsdir": "./frontend/src/lib",
