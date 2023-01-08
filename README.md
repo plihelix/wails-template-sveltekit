@@ -6,11 +6,9 @@ This is a minimally invasive template remix of [Wails.io](https://wails.io) to s
 
 ## Why is the static site adapter needed in Svelte Kit and not Svelte?
 
-*Well, it may not be. I'm still wrapping my head around it.*
+The first thing to understand is that Vite is a web-server which is used for the dev mode. Wails uses this to locally host a website with live reload for development mode, which the application navigates to. This is commonly used for all the top frameworks and has robust features such as server side rendering(ssr).
 
-* The first thing to understand is that Vite is a web-server which is used for the dev mode. Wails uses this to locally host a website with live reload for development mode, which the application navigates to. This is commonly used for all the top frameworks and has robust features such as server side rendering(ssr).
-
-Wails.io is an application framework that by design packages the html, js, etc front end into the binary executable during `wails build`. This happens in main.go with:
+* Wails.io is an application framework that by design packages the html, js, etc front end into the binary executable during `wails build`. This happens in main.go with:
 ```go
 //go:embed all:frontend/dist
 var assets embed.FS
@@ -20,7 +18,6 @@ If I'm reading the source correctly, these assets are served out of this embedde
 The default configuration of Vite for Svelte Kit projects includes ssr. But, this is normal for web served applications using **server** compute for more "consistent" web user experience by sending server rendered html to the client. This is more consistent than an api call to that same server, yes. But in a wails app, we're packaging the UI in the binary itself.
 
 This means that **unlike Vite,** wails doesn't provide a web-server with a Javascript back end built in. It uses the appropriate webclient to provide the Javascript runtime. 
-- *(webview2 in windows, webkit2 on linux, and wkwebview on mac respectively)*
 
 ## Dependencies:
 
@@ -59,11 +56,7 @@ On this game, you want to do a bunch of levels with different art? You can proba
 
 Using SvelteKit, the user can just navigate to the new endpoint. Automatically unloading the old page and cleaning up connections, while loading in just what you need. Just like wails svelte, the page is built around the data provided to it as it's loaded. So, for this example, the controls and hud can be loaded from their own endpoints, each level from it's own.
 
-# How to install this template
-
-- `wails init -n {MY_APP} -t https://github.com/plihelix/wails-sveltekit`
-
-# How to install any Vite based *SvelteKit* frontend into a new Wails project
+# How to install any Vite based *SvelteKit* frontend into a new Wails project.
 
 Init your new project as normal
 - `wails init -n {MY_APP} -t svelte` 
@@ -159,15 +152,15 @@ While its probably best to just create this folder and reference it via `$lib/wa
 ## Edit the `frontend/tsconfig.json` or `frontend/jsconfig.json` file and add paths to the bottom of the `"compilerOptions":`.
 
 ```js
-    "paths": {
-      // Overwrites the defaults and $lib is required for svelte-kit.
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"],
-      // Adds the ability to import the binding js.
-      // For example: `import { Greet } from '@wailsjs/go/main/App.js'`
-      "@/*": ["*"]
-    }
-
+"paths": {
+// Overwrites the defaults and $lib is required for svelte-kit.
+  "$lib": ["src/lib"],
+  "$lib/*": ["src/lib/*"],
+// Adds the ability to import from the `frontend/` folder.
+// For example: `import { Greet } from '@wailsjs/go/main/App.js'`
+// if wails put `wailsjs/` in the front end root.
+  "@/*": ["*"]
+}
 ```
 
 ## Edit the `frontend/vite.config.js` file:
@@ -192,7 +185,6 @@ const config = {
       '@': path.resolve(__dirname, './'), 
     },
   },
->>>>>>> Stashed changes
 };
 
 export default config;
