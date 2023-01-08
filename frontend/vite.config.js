@@ -13,7 +13,7 @@ const config = {
   resolve: {
     alias: {
       // This alias finishes the ability to reference our
-      // wailsjs dirctory for our go bindings.
+      // frontend dirctory.
       '@': path.resolve(__dirname, './'), 
     },
   },

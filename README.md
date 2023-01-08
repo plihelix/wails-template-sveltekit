@@ -127,36 +127,38 @@ npm i -D @sveltejs/adapter-static
 ## Edit the svelte.config.js file.
 
 ```js
-import adapter from '@sveltejs/adapter-auto';  // Change the adapter-auto to this.
-import preprocess from "svelte-preprocess";     // <-- Others may be included from your template.
+// Change from adapter-auto to adapter-static
+import adapter from '@sveltejs/adapter-static';
+// Other imports may be present depending on your template.
+import preprocess from "svelte-preprocess";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	kit: {                        // <-- Begins SvelteKit options.
-		adapter: adapter({
-      fallback: 'index.html'    // Add this. (Don't forget the bounding '{}')
+  // SvelteKit's section:
+  kit: {
+    adapter: adapter({
+      // Static needs a fallback page.
+      fallback: 'index.html'
+    })
+  },
+  // (Vite's section):
+  // Others:
+  preprocess: [
+    preprocess({
+      postcss: true,
     }),
-<<<<<<< Updated upstream
-    embedded: true,             // Add this.
-	},                            // <-- Others may be included from your template.
-	preprocess: [
-		preprocess({
-			postcss: true,
-		}),
-	],
-=======
   ],
 }
 
 export default config;
 ```
 
-# If the `frontend/src/lib` folder does not exist, wails will deposit the `wailsjs/` folder into the front end root.
+## **If the `frontend/src/lib` folder does not exist, wails will deposit the `wailsjs/` folder into the front end root.**
 While its probably best to just create this folder and reference it via `$lib/wailsjs/go/main/App.js`, I'm going to go ahead and show how to create an `@` link that begins at `frontend/`.
 
 ## Edit the `frontend/tsconfig.json` or `frontend/jsconfig.json` file and add paths to the bottom of the `"compilerOptions":`.
 
-```json
+```js
     "paths": {
       // Overwrites the defaults and $lib is required for svelte-kit.
       "$lib": ["src/lib"],
