@@ -13,7 +13,6 @@ The first thing to understand is that Vite is a web-server which is used for the
 //go:embed all:frontend/dist
 var assets embed.FS
 ```
-If I'm reading the source correctly, these assets are served out of this embedded file-system to each systems web kit by a lightweight file asset server. 
 
 The default configuration of Vite for Svelte Kit projects includes ssr. But, this is normal for web served applications using **server** compute for more "consistent" web user experience by sending server rendered html to the client. This is more consistent than an api call to that same server, yes. But in a wails app, we're packaging the UI in the binary itself.
 
@@ -21,13 +20,13 @@ This means that **unlike Vite,** wails doesn't provide a web-server with a Javas
 
 ## Dependencies:
 
-* A nodejs package manager.
-* Install wails. ([docs](https://wails.io/docs/gettingstarted/installation))
+* A nodejs package manager. *Defaults to npm.*
+* Install wails.
 
 ## Install:
 
 ```bash
-wails init -n [My-App-Name] -t https://github.com/plihelix/wails-sveltekit
+wails init -n MYAPP -t https://github.com/plihelix/wails-template-sveltekit
 ```
 
 ## Live Development
@@ -36,7 +35,7 @@ To run in live development mode, run `wails dev` in the project directory. This 
 
 * `wails dev` should properly launch vite to serve the site for live development without needing to seperately launch 'npm run dev' or your flavor such as pnpm in the frontend directory seperately.
 
-The adapter combined with the option not to do server side rendering builds the site into the frontend/build directory which is embedded into the application during `wails build` or (iirc) file referenced during `dev` mode. I find this to be great for live development stability; any error which stops a rebuild, avoids getting sent to the wails app webclient. Save early, save often with less fear.
+The adapter combined with the option not to do server side rendering builds the site into the frontend/build directory which is embedded into the application during `wails build` or file referenced during `dev` mode. I find this to be great for live development stability; any error which stops a rebuild, avoids getting sent to the wails app webclient. Save early, save often with less fear.
 
 ## Building
 
@@ -56,21 +55,21 @@ On this game, you want to do a bunch of levels with different art? You can proba
 
 Using SvelteKit, the user can just navigate to the new endpoint. Automatically unloading the old page and cleaning up connections, while loading in just what you need. Just like wails svelte, the page is built around the data provided to it as it's loaded. So, for this example, the controls and hud can be loaded from their own endpoints, each level from it's own.
 
-# How to install any Vite based *SvelteKit* frontend into a new Wails project.
+# How to install any *SvelteKit* frontend into a new Wails project.
 
 Init your new project as normal
-- `wails init -n {MY_APP} -t svelte` 
+- `wails init -n MYAPP -t svelte` 
 
 *I used the svelte base just in case I am misunderstanding how this all works together.*
 
-Remove the new `{MY_APP}/frontend` folder:
+Remove the new `MYAPP/frontend` folder:
 
 ```bash
-cd MY_APP
+cd MYAPP
 rm -r ./frontend
 ```
 
-Use the npm create to generate a new /frontend from a template: (eg:)
+Use npm create to generate a new /frontend from a template: (eg:)
 
 - SvelteKit - and nothing else, yet.
 
@@ -82,8 +81,7 @@ Use the npm create to generate a new /frontend from a template: (eg:)
 
 * The `Yes, using Typescript syntax` option is by recommended by SkeletonUI.
 
-I don't see why this wouldn't be the go-to choice with most; since wails uses generated ts as well.
-The choices here will only matter if you open the **project** in your editor at the `/frontend`  or use their commands from within the front end folder.
+Note: I don't see why this wouldn't be the go-to choice with most; since wails uses generated ts as well. The choices here will only matter if you open the **project** in your editor at the `/frontend`  or use their commands from within the front end folder.
 
 ## Here is where we can replicate the main issue people have when attempting to use Wails with SvelteKit.
 
@@ -91,9 +89,7 @@ The choices here will only matter if you open the **project** in your editor at 
 
 * On `wails build`, (default) `/frontend/dist/**/*` is stored into the binary. Wail apps, serves their *embedded* file-system to `localhost:5143`.
 
-Both are accessed by the web kit just like any website. Allowing for all of the clientside js in the svelte page, but not the code that would run on the server in a js runtime environment.
-
-A default Svelte Kit project in the `/frontend` folder expects a Vite to do server side rendering and included server side Javascript out of the `/frontend/[src]` directories. Wails can take advantage of this in dev mode because Vite is doing the work, it just navigates to the web socket.
+Both are accessed by the web kit just like any website. Allowing for all of the clientside js in the svelte page, but not the code that would run on the server in a js runtime environment. A default Svelte Kit project in the `/frontend` folder expects a Vite to do server side rendering and included server side Javascript out of the `/frontend/[src]` directories. Wails can take advantage of this in dev mode because Vite is doing the work, it just navigates to the web socket.
 
 * Compare: Vite w/ Svelte embeds all the script that is in the `[whatever].svelte` into a single top page and builds that page once.
 
@@ -109,7 +105,7 @@ var assets embed.FS
 ```
 Note: Turning off ssr results in a minor launch hang time in dev mode as Vite compiles the assets into the build directory. This hang should be absent when compiled.
 
-## Turning off ssr with adapter-static.
+## How to run off ssr with adapter-static.
 
 Go into the front end folder and install the dependencies adding @sveltejs/adapter-static.
 ```bash
@@ -146,19 +142,25 @@ const config = {
 export default config;
 ```
 
-## **If the `frontend/src/lib` folder does not exist, wails will deposit the `wailsjs/` folder into the front end root.**
-While its probably best to just create this folder and reference it via `$lib/wailsjs/go/main/App.js`, I'm going to go ahead and show how to create an `@` link that begins at `frontend/`.
+## **How to get access to the wailsjs folder:**
+
+In `wails.json`, the following option controls where wails places the `wailsjs/` directory. For easiest use, simply direct it into the default library alias for SvelteKit.
+
+```js
+"wailsjsdir": "./frontend/src/lib",
+```
+
+While its probably best to just create this folder and reference it via `$lib/wailsjs/go/.../App.js`, I'm going to go ahead and show how to create an `@` link that begins at `frontend/`.
 
 ## Edit the `frontend/tsconfig.json` or `frontend/jsconfig.json` file and add paths to the bottom of the `"compilerOptions":`.
 
 ```js
 "paths": {
-// Overwrites the defaults and $lib is required for svelte-kit.
+  // Overwrites the defaults and $lib is required for svelte-kit.
   "$lib": ["src/lib"],
   "$lib/*": ["src/lib/*"],
-// Adds the ability to import from the `frontend/` folder.
-// For example: `import { Greet } from '@wailsjs/go/main/App.js'`
-// if wails put `wailsjs/` in the front end root.
+  
+  // Adds the ability to import from the `frontend/` folder.
   "@/*": ["*"]
 }
 ```
@@ -181,7 +183,8 @@ const config = {
   resolve: {
     alias: {
       // This alias finishes the ability to reference our
-      // wailsjs dirctory for our go bindings.
+      // frontend/ with `@path/to/file`.
+      //
       '@': path.resolve(__dirname, './'), 
     },
   },
@@ -190,7 +193,8 @@ const config = {
 export default config;
 ```
 
-# Don't forget to include `.sveltekit` in your git or you'll probably have trouble after cloning.
+# Don't forget to include `.sveltekit` in your git or you'll probably have trouble after cloning as it is required.
+
 ## There is a simple shell script to do this with [SkeletonUI](https://www.skeleton.dev/guides/install) located in its own [repo](https://www.github.com/plihelix/wails-skeletonui-script). Feel free to customize to your needs!
 
 That's it, go back to the root of the project and run `wails dev` or `wails build`. Enjoy!
