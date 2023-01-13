@@ -5,16 +5,16 @@ import path from 'path'
 const config = {
   server: {
     fs: {
-      // Allow serving files from the frontend project root
-      allow: ['.'],
+      // To allow serving files from the frontend project root.
+      // allow: ['.'],
     },
   },
 	plugins: [sveltekit()],
   resolve: {
     alias: {
       // This alias finishes the ability to reference our
-      // frontend dirctory.
-      '@': path.resolve(__dirname, './'), 
+      // frontend dirctory. With "@path/to/file"
+      // '@': path.resolve(__dirname, './'), 
     },
   },
 };

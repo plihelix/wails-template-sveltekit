@@ -4,6 +4,7 @@ import adapter from '@sveltejs/adapter-static';
 export default {
   kit: {
 		adapter: adapter({
+      // Static needs a fallback page.
       fallback: 'index.html'
     }),
 	},
