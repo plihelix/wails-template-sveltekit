@@ -6,6 +6,7 @@ const config = {
   server: {
     fs: {
       // To allow serving files from the frontend project root.
+      //
       // allow: ['.'],
     },
   },
@@ -13,7 +14,9 @@ const config = {
   resolve: {
     alias: {
       // This alias finishes the ability to reference our
-      // frontend dirctory. With "@path/to/file"
+      // frontend dirctory with "@path/to/file."
+      // You also need to add the path to jsconfig.json.
+      //
       // '@': path.resolve(__dirname, './'), 
     },
   },

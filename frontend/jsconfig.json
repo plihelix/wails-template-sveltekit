@@ -15,7 +15,7 @@
       "$lib/*": ["src/lib/*"],
       // Adds the ability to import the binding js.
       // For example: `import { Greet } from '@wailsjs/go/main/App.js'`
-      "@/*": ["*"]
+      // "@/*": ["*"]
     }
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias and https://kit.svelte.dev/docs/configuration#files
