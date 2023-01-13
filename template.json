@@ -1,7 +1,7 @@
 {
-  "name": "Wails-SvelteKit",
-  "shortname": "wails-sveltekit",
+  "name": "Wails-Template-SvelteKit",
+  "shortname": "Wails-Template-SvelteKit",
   "author": "plihelix",
-  "description": "SvelteKit template",
+  "description": "A simple wails with Static SvelteKit template",
   "helpurl": "https://github.com/plihelix/wails-sveltekit"
 }
