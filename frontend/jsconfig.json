@@ -11,8 +11,8 @@
 		"strict": true,
     "paths": {
       // Overwrites the defaults and $lib is required for svelte-kit.
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"],
+      "$lib": ["./src/lib"],
+      "$lib/*": ["./src/lib/*"],
       // Adds the ability to import the binding js.
       // For example: `import { Greet } from '@wailsjs/go/main/App.js'`
       // "@/*": ["*"]
